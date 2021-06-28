@@ -17,8 +17,12 @@ list_id = [1,1839,4687,1831,2010,1975,4943,74,1027,2,6636,3890,5426,512,2416,825
 url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
 response = requests.get(url,params=parameters)
 recievedValue = response.json()
-dumpValue = {}
+with open('dump.json','r') as inp:
+	dumpValue=json.load(inp)
+while(len(dumpValue['1'])>23):
+	for i in list_id:
+		dumpValue[str(i)].pop(0)
 for i in list_id:
-	dumpValue[str(i)] = str(recievedValue['data'][str(i)]['quote']['USD']['price'])
+	dumpValue[str(i)].append(str(recievedValue['data'][str(i)]['quote']['USD']['price']))
 with open('dump.json','w') as out:
 	json.dump(dumpValue,out,indent=4)
